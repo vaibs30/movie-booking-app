@@ -1,0 +1,336 @@
+{% load static %}
+<!DOCTYPE HTML>
+<!--
+	Hielo by TEMPLATED
+	templated.co @templatedco
+	Released for free under the Creative Commons Attribution 3.0 license (templated.co/license)
+-->
+<html>
+	<head>
+		<title>Movie -{{movie.name}}</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="{% static 'event/main.css' %}" />
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">  
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+	</head>
+	<body>
+
+		<!-- Nav -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark static-top">
+      <div class="container">
+        <a class="navbar-brand" href="#">
+              <img src="{% static 'event/logo.png' %}" alt="">
+            </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+              <span class="navbar-toggler-icon"></span>
+            </button>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item active">
+              <a class="nav-link" href="{% url 'index' %}">All movies</a>
+            </li>
+            {% if user.is_authenticated %}
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'create' %}">Create a Movie</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'logout' %}">Log Out</a>
+            </li>
+        {% else %}
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'login' %}">Log In</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'register' %}">Register</a>
+            </li>
+        {% endif %}
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    		<!-- One -->
+			<section id="One" class="wrapper style3">
+				<div class="inner">
+					<header class="align-center">
+						<p>NOW! EST 2020</p>
+						<h2>BOOK YOUR TICKETS NOW!</h2>
+					</header>
+				</div>
+			</section>
+
+		<!-- Banner -->
+			<section class="banner full">
+				<article>
+					<img src="{{movie.imageURL}}" alt="" />
+					<div class="inner">
+						<header>
+							{% if movie.is_upcoming == False %}
+                            <p>Now showing!</p>
+                            {% else %}
+                            <p>Upcoming movie!</p>
+                            {% endif %}
+							<h2>{{movie.name}}</h2>
+						</header>
+					</div>
+				</article>
+			</section>
+
+		<!-- One -->
+			<section id="one" class="wrapper style2">
+				<div class="inner">
+					<div class="grid-style">
+						<div>
+							<div class="box">
+								<div class="image fit">
+									<img src="{{movie.imageURL}}" alt="" style="max-height: 350px;" />
+								</div>
+								<div class="content">
+									<header class="align-center">
+										{% if movie.is_upcoming == False %}
+										<p>Now showing!</p>
+										{% else %}
+										<p>Upcoming movie!</p>
+										{% endif %}
+										<h2>{{ movie.name }}</h2>
+									</header>
+                                        <p><strong>About Movie:</strong> {{ movie.description }}</p>
+                                        <p><strong>Cast:</strong> {{ movie.cast }}</p>
+                                        <strong>Rating: </strong>{{ movie.rating }} <i class="fa fa-star" aria-hidden="true">'s</i>
+									<footer class="align-center">
+									</footer>
+								</div>
+							</div>
+						</div>
+						<div>
+                            {% if movie.is_upcoming == False %}
+                            {% for screen in screens %}
+                            {% if screen.name == "Elite" %}
+							<div class="box">
+								<div class="content">
+									<header class="align-center">
+										<p>SCREEN</p>
+										<h2>{{screen.name.upper}}</h2>
+                                    </header>
+                                    <p><strong>Seats available:</strong></p>
+                                    <p>A row: {{screen.A}} B row: {{screen.B}}</p>
+                                    <p>C row: {{screen.C}} D row: {{screen.D}}</p>
+									<footer class="align-center">
+                                        <form id="post-form">
+                                            <div class="12u$">
+                                                <div class="select-wrapper">
+                                                    <select name="row_seat" id="elite_row">
+                                                        <option value="">Choose Row</option>
+                                                        {% if screen.A > 0 %}
+                                                        <option value="A">A row</option>
+                                                        {% endif %}
+                                                        {% if screen.B > 0 %}
+                                                        <option value="B">B row</option>
+                                                        {% endif %}
+                                                        {% if screen.C > 0 %}
+                                                        <option value="C">C row</option>
+                                                        {% endif %}
+                                                        {% if screen.name > 0 %}
+                                                        <option value="D">D row</option>
+                                                        {% endif %}
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div>
+                                                <button disabled onclick="booking_elite()" class="button" style="margin-top: 1em;" id="elite_book">BOOK NOW!</button>
+                                            </div>
+                                        </form>
+									</footer>
+								</div>
+                            </div>
+                            {% elif screen.name == "Royal" %}
+                            <div class="box">
+								<div class="content">
+									<header class="align-center">
+										<p>SCREEN</p>
+										<h2>{{screen.name.upper}}</h2>
+                                    </header>
+                                    <p><strong>Seats available:</strong></p>
+                                    <p>A row: {{screen.A}} B row: {{screen.B}}</p>
+                                    <p>C row: {{screen.C}} D row: {{screen.D}}</p>
+									<footer class="align-center">
+                                        <form id="post-form">
+                                            <div class="12u$">
+                                                <div class="select-wrapper">
+                                                    <select name="row_seat" id="royal_row">
+                                                        <option value="">Choose Row</option>
+                                                        {% if screen.A != 0 %}
+                                                        <option value="A">A row</option>
+                                                        {% endif %}
+                                                        {% if screen.B != 0 %}
+                                                        <option value="B">B row</option>
+                                                        {% endif %}
+                                                        {% if screen.C != 0 %}
+                                                        <option value="C">C row</option>
+                                                        {% endif %}
+                                                        {% if screen.name != 0 %}
+                                                        <option value="D">D row</option>
+                                                        {% endif %}
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div>
+                                                <button disabled onclick="booking_royal()" class="button" style="margin-top: 1em;" id="royal_book">BOOK NOW!</button>
+                                            </div>
+                                        </form>
+									</footer>
+								</div>
+                            </div>
+                            {% elif screen.name == "Economy" %}
+                            <div class="box">
+								<div class="content">
+									<header class="align-center">
+										<p>SCREEN</p>
+										<h2>{{screen.name.upper}}</h2>
+                                    </header>
+                                    <p><strong>Seats available:</strong></p>
+                                    <p>A row: {{screen.A}} B row: {{screen.B}}</p>
+                                    <p>C row: {{screen.C}} D row: {{screen.D}}</p>
+									<footer class="align-center">
+                                        <form id="post-form">
+                                            <div class="12u$">
+                                                <div class="select-wrapper">
+                                                    <select name="row_seat" id="economy_row">
+                                                        <option value="">Choose Row</option>
+                                                        {% if screen.A != 0 %}
+                                                        <option value="A">A row</option>
+                                                        {% endif %}
+                                                        {% if screen.B != 0 %}
+                                                        <option value="B">B row</option>
+                                                        {% endif %}
+                                                        {% if screen.C != 0 %}
+                                                        <option value="C">C row</option>
+                                                        {% endif %}
+                                                        {% if screen.name != 0 %}
+                                                        <option value="D">D row</option>
+                                                        {% endif %}
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div>
+                                                <button disabled onclick="booking_economy()" class="button" style="margin-top: 1em;" id="economy_book">BOOK NOW!</button>
+                                            </div>
+                                        </form>
+									</footer>
+								</div>
+                            </div>
+                            {% endif %}
+                            {% endfor %}
+                            {% else %}
+                            <div class="box">
+								<div class="content">
+									<header class="align-center">
+										<p>ANNOUNCEMENT</p>
+										<h2>Movie releasing soon.</h2>
+                                    </header>
+								</div>
+                            </div>
+                            {% endif %}
+            </div>
+            <div>
+            </div>
+					</div>
+				</div>
+			</section>
+
+
+		<!-- Footer -->
+			<footer id="footer">
+				<div class="container">
+					<ul class="icons">
+						<li><a href="#" class="icon fa-twitter"><span class="label">Twitter</span></a></li>
+						<li><a href="#" class="icon fa-facebook"><span class="label">Facebook</span></a></li>
+						<li><a href="#" class="icon fa-instagram"><span class="label">Instagram</span></a></li>
+						<li><a href="#" class="icon fa-envelope-o"><span class="label">Email</span></a></li>
+					</ul>
+				</div>
+				<div class="copyright">
+					&copy; Built by Vaibhav. All rights reserved.
+				</div>
+			</footer>
+
+		<!-- Scripts -->
+			<script src="{% static 'event/jquery.min.js' %}"></script>
+			<script src="{% static 'event/jquery.scrollex.min.js' %}"></script>
+			<script src="{% static 'event/skel.min.js' %}"></script>
+			<script src="{% static 'event/util.js' %}"></script>
+			<script src="{% static 'event/main.js' %}"></script>
+            <script>
+                document.addEventListener('DOMContentLoaded', function() {
+                    try {
+                        document.querySelector('#economy_row').addEventListener('click', function() {
+                        if(document.querySelector('#economy_row').value != ""){
+                            document.querySelector('#economy_book').removeAttribute("disabled");
+                        }
+                    });
+                    } catch (error) {
+                        
+                    }
+                    try {
+                        document.querySelector('#elite_row').addEventListener('click', function() {
+                        if(document.querySelector('#elite_row').value != ""){
+                            document.querySelector('#elite_book').removeAttribute("disabled");
+                        }
+                    });
+                    } catch (error) {
+                        
+                    }
+                    try {
+                        document.querySelector('#royal_row').addEventListener('click', function() {
+                        if(document.querySelector('#royal_row').value != ""){
+                            document.querySelector('#royal_book').removeAttribute("disabled");
+                        }
+                    });
+                    } catch (error) {
+                        
+                    }
+                });
+                function booking_royal() {
+                    var movie_id =  "{% if user %}{{ movie.id }}{% endif %}";
+                    fetch('/book', {
+                        method : 'POST',
+                        body: JSON.stringify({
+                            screen : "Royal",
+                            row: document.querySelector('#royal_row').value,
+                            movie_id: movie_id,
+                        }),
+                    })
+                    .then((res) => res.json())
+                    .then((result) => window.location.reload())
+                };
+                function booking_elite() {
+                    var movie_id =  "{% if user %}{{ movie.id }}{% endif %}";
+                    console.log(movie_id)
+                    fetch('/book', {
+                        method: 'POST',
+                        body: JSON.stringify({
+                            screen: "Elite",
+                            row: document.querySelector('#elite_row').value,
+                            movie_id: movie_id,
+                        }),
+                    })
+                    .then((res) => res.json())
+                    .then((result) => window.location.reload())
+                };
+                function booking_economy() {
+                    var movie_id =  "{% if user %}{{ movie.id }}{% endif %}";
+                    fetch('/book', {
+                        method : 'POST',
+                        body: JSON.stringify({
+                            screen : "Economy",
+                            row: document.querySelector('#economy_row').value,
+                            movie_id: movie_id,
+                        }),
+                    })
+                    .then((res) => res.json())
+                    .then((result) => window.location.reload())
+                };
+            </script>
+	</body>
+</html>

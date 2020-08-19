@@ -1,0 +1,145 @@
+{% load static %}
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<title>NOW!</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="{% static 'event/main.css' %}" />
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">  
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+	</head>
+	<body>
+
+		<!-- Nav -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark static-top">
+      <div class="container">
+        <a class="navbar-brand" href="#">
+              <img src="{% static 'event/logo.png' %}" alt="">
+            </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+              <span class="navbar-toggler-icon"></span>
+            </button>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item active">
+              <a class="nav-link" href="{% url 'index' %}">All movies</a>
+            </li>
+            {% if user.is_authenticated %}
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'create' %}">Create a Movie</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'logout' %}">Log Out</a>
+            </li>
+        {% else %}
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'login' %}">Log In</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'register' %}">Register</a>
+            </li>
+        {% endif %}
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    		<!-- One -->
+			<section id="One" class="wrapper style3">
+				<div class="inner">
+					<header class="align-center">
+						<p>NOW! EST 2020</p>
+						<h2>All Movies!</h2>
+					</header>
+				</div>
+			</section>
+
+		<!-- Banner -->
+			<section class="banner full">
+				<article>
+					<img src="{% static 'event/theatre1.jpg' %}" alt="" />
+					<div class="inner">
+						<header>
+							<p>Royal, Elite and Economy</p>
+							<h2>Exclusive Screens</h2>
+						</header>
+					</div>
+				</article>
+				<article>
+					<img src="{% static 'event/theatre2.jpg' %}" alt="" />
+					<div class="inner">
+						<header>
+							<p>For a great music experience</p>
+							<h2>Dolby Sound</h2>
+						</header>
+					</div>
+				</article>
+				<article>
+					<img src="{% static 'event/theatre3.jpg' %}"  alt="" />
+					<div class="inner">
+						<header>
+							<p>Popcorn, Drinks, Burger etc..</p>
+							<h2>Snacks</h2>
+						</header>
+					</div>
+				</article>
+			</section>
+
+		<!-- One -->
+			<section id="one" class="wrapper style2">
+				<div class="inner">
+					<div class="grid-style">
+            {% for movie in movies %}
+						<div>
+							<div class="box">
+								<div class="image fit">
+									<img src="{{movie.imageURL}}" alt="" style="max-height: 350px;" />
+								</div>
+								<div class="content">
+									<header class="align-center">
+										{% if movie.is_upcoming == False %}
+										<p>Now showing!</p>
+										{% else %}
+										<p>Upcoming movie!</p>
+										{% endif %}
+										<h2>{{ movie.name }}</h2>
+									</header>
+                  <p><strong>About Movie:</strong> {{ movie.description }}</p>
+                  <p><strong>Cast:</strong> {{ movie.cast }}</p>
+                  <strong>Rating: </strong>{{ movie.rating }} <i class="fa fa-star" aria-hidden="true">'s</i>
+									<footer class="align-center">
+										<a href="{% url 'movie' movie.id %}" class="button alt">Order tickets</a>
+									</footer>
+								</div>
+							</div>
+						</div>
+            {% endfor %}
+					</div>
+				</div>
+			</section>
+
+		<!-- Footer -->
+			<footer id="footer">
+				<div class="container">
+					<ul class="icons">
+						<li><a href="#" class="icon fa-twitter"><span class="label">Twitter</span></a></li>
+						<li><a href="#" class="icon fa-facebook"><span class="label">Facebook</span></a></li>
+						<li><a href="#" class="icon fa-instagram"><span class="label">Instagram</span></a></li>
+						<li><a href="#" class="icon fa-envelope-o"><span class="label">Email</span></a></li>
+					</ul>
+				</div>
+				<div class="copyright">
+					&copy; Built by Vaibhav. All rights reserved.
+				</div>
+			</footer>
+
+		<!-- Scripts -->
+			<script src="{% static 'event/jquery.min.js' %}"></script>
+			<script src="{% static 'event/jquery.scrollex.min.js' %}"></script>
+			<script src="{% static 'event/skel.min.js' %}"></script>
+			<script src="{% static 'event/util.js' %}"></script>
+			<script src="{% static 'event/main.js' %}"></script>
+
+	</body>
+</html>

@@ -1,0 +1,172 @@
+{% load static %}
+<!DOCTYPE HTML>
+
+<html>
+	<head>
+		<title>NOW!</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link rel="stylesheet" href="{% static 'event/main.css' %}" />
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">  
+    </head>
+
+	<body class="subpage">
+
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark static-top">
+            <div class="container">
+              <a class="navbar-brand" href="{% url 'index' %}">
+                    <img src="{% static 'event/logo.png' %}" alt="">
+                  </a>
+              <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                  </button>
+              <div class="collapse navbar-collapse" id="navbarResponsive">
+                <ul class="navbar-nav ml-auto">
+                  <li class="nav-item">
+                    <a class="nav-link" href="{% url 'index' %}">All movies</a>
+                  </li>
+                  {% if user.is_authenticated %}
+                  <li class="nav-item active">
+                      <a class="nav-link" href="{% url 'create' %}">Create a Movie</a>
+                  </li>
+                  <li class="nav-item">
+                      <a class="nav-link" href="{% url 'logout' %}">Log Out</a>
+                  </li>
+              {% else %}
+                  <li class="nav-item">
+                      <a class="nav-link" href="{% url 'login' %}">Log In</a>
+                  </li>
+                  <li class="nav-item">
+                      <a class="nav-link" href="{% url 'register' %}">Register</a>
+                  </li>
+              {% endif %}
+                </ul>
+              </div>
+            </div>
+          </nav>
+
+		<!-- Header -->
+			<header id="header">
+				<div class="logo"><a>Logged in as {{ request.user }}<span></span></a></div>
+			</header>
+
+
+		<!-- One -->
+			<section id="One" class="wrapper style3">
+				<div class="inner">
+					<header class="align-center">
+						<p>NOW! EST 2020</p>
+						<h2>Create a new movie!</h2>
+					</header>
+				</div>
+			</section>
+
+		<!-- Two -->
+			<section id="two" class="wrapper style2">
+				<div class="inner">
+					<div class="box">
+						<div class="content">
+							<header class="align-center">
+								<p>Welcome, {{request.user.username}}</p>
+								<h2>BLOCKBUSTER</h2>
+                            </header>
+                            <form id="post-form">
+                                <div class="form-group" >
+                                    Name of the movie: <input id="form-title" class="form-control">
+                                </div>
+                                <div class="form-group" >
+                                    About the movie: <input id="form-description" class="form-control">
+                                </div>
+                                <div class="form-group" >
+                                    Rating: <input id="form-rating" class="form-control" type="number">
+                                </div>
+                                <div class="form-group" >
+                                    Cast: <input id="form-cast" class="form-control">
+                                </div>
+                                <div class="form-group" >
+                                    Cover photo URL: <input id="form-imageURL" class="form-control">
+                                </div>
+                                <div class="form-group">
+                                    <input type="radio" id="form-upcoming" name="upcoming" class="custom-control-input">
+                                    <label class="custom-control-label" for="form-upcoming">Is it an upcoming movie?</label>
+                                  </div>
+                                  <label class="my-1 mr-2" for="form-screens">Choose the screens:</label>
+                                  <div class="form-group">
+                                    <input type="checkbox" class="custom-control-input" id="form-royal" name="royal">
+                                    <label class="custom-control-label" for="form-royal">Royal</label>
+                                  </div>
+                                  <div class="form-group">
+                                    <input type="checkbox" class="custom-control-input" id="form-elite">
+                                    <label class="custom-control-label" for="form-elite">Elite</label>
+                                  </div>
+                                  <div class="form-group">
+                                    <input type="checkbox" class="custom-control-input" id="form-economy">
+                                    <label class="custom-control-label" for="form-economy">Economy</label>
+                                  </div>
+                                <input type="submit" class="btn btn-primary" id="form-submit"/>
+                            </form>
+						</div>
+					</div>
+				</div>
+			</section>
+
+		<!-- Footer -->
+			<footer id="footer">
+				<div class="container">
+					<ul class="icons">
+						<li><a href="#" class="icon fa-twitter"><span class="label">Twitter</span></a></li>
+						<li><a href="#" class="icon fa-facebook"><span class="label">Facebook</span></a></li>
+						<li><a href="#" class="icon fa-instagram"><span class="label">Instagram</span></a></li>
+						<li><a href="#" class="icon fa-envelope-o"><span class="label">Email</span></a></li>
+					</ul>
+				</div>
+				<div class="copyright">
+					&copy; Built by vaibs30. All rights reserved.
+				</div>
+			</footer>
+
+		<!-- Scripts -->
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                var royal = false;
+                var elite = false;
+                var economy = false;
+                var upcoming = false;
+                document.querySelector('#form-royal').addEventListener('click', function() {
+                    royal = document.querySelector('#form-royal').checked;
+                });
+                document.querySelector('#form-elite').addEventListener('click', function() {
+                    elite = document.querySelector('#form-elite').checked;
+                });
+                document.querySelector('#form-economy').addEventListener('click', function() {
+                    economy = document.querySelector('#form-economy').checked;
+                });
+                document.querySelector('#form-upcoming').addEventListener('click', function() {
+                    upcoming = document.querySelector('#form-upcoming').checked;
+                });
+                document.querySelector('#form-submit').addEventListener('click', function() {
+                    fetch('/create', {
+                        method: 'POST',
+                        body: JSON.stringify({
+                            title : document.querySelector('#form-title').value,
+                            description : document.querySelector('#form-description').value,
+                            rating : document.querySelector('#form-rating').value,
+                            cast : document.querySelector('#form-cast').value,
+                            imageURL : document.querySelector('#form-imageURL').value,
+                            title : document.querySelector('#form-title').value,
+                            upcoming : upcoming,
+                            royal : royal,
+                            elite : elite,
+                            economy : economy,
+                        }),
+                    })
+                    .then((res) => res.json())
+                    .then((result) => {
+                        console.log(result)
+                    })
+                });
+            });
+        </script>
+
+	</body>
+</html>
